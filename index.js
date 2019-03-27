@@ -21,8 +21,6 @@ function Vue(options) {
       }
     })
   }
-  // console.log(this)
-
   // 实现模板编译
   new Compile(this.$options.el, this)
 }
@@ -79,15 +77,15 @@ function observe(data) {
 function Observe(data) {
   // 发布订阅
   let eventHub = new EventHub();
-
   // 在set值的时候
-  for (var key in data) {
-    var value = data[key]
-
+  for (let key in data) {
+    // console.log(this) this指向Observe
+    let value = data[key]
     Object.defineProperty(data, key, {
       enumerable: true,
       configurable: false,
       get() {
+        //console.log(this) //this指向Object
         EventHub.target && eventHub.addSub(EventHub.target)
         return value
       },
@@ -96,7 +94,6 @@ function Observe(data) {
           return
         }
         value = newValue
-
         eventHub.notify()
       }
     })
@@ -106,7 +103,6 @@ function Observe(data) {
 // 发布订阅
 function EventHub() {
   this.list = []
-
 }
 // 订阅
 EventHub.prototype.addSub = function (sub) {
